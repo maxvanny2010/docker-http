@@ -1,4 +1,8 @@
-## DOCKER
+## DOCKER SSR HTTP
+
+#### [home]
+
+![home](./public/index.png)
 
 ### install Ubuntu
 
@@ -26,31 +30,31 @@ wsl -l -v
 wsl -d Ubuntu
 ```
 
-# Обновляем пакеты
+### Обновляем пакеты
 
 ```yaml
 sudo apt update && sudo apt upgrade -y
 ```
 
-# Ставим curl, если ещё нет
+### Ставим curl, если ещё нет
 
 ```yaml
 sudo apt install -y curl
 ```
 
-# Добавляем репозиторий Node.js (например, версия LTS 20.x)
+### Добавляем репозиторий Node.js (например, версия LTS 20.x)
 
 ```yaml
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 ```
 
-# Устанавливаем Node.js
+### Устанавливаем Node.js
 
 ```yaml
 sudo apt install -y nodejs
 ```
 
-# Проверяем
+### Проверяем
 
 ```yaml
 node -v
@@ -67,7 +71,7 @@ npm -v
 
 ### commands
 
-# Docker + Docker Compose (WSL + Node.js) — Мини-шпаргалка
+## Docker + Docker Compose (WSL + Node.js) — Мини-шпаргалка
 
 ### 🔹 Основные Docker команды
 
@@ -223,6 +227,7 @@ docker image prune -a
 
 Опция -a → удаляет все образы, которые не используются контейнерами.
 Потребует подтверждения y/n.
+
 3️⃣ Удаление всех образов без исключений
 Удалить все локальные образы, даже если к ним привязаны контейнеры, сначала останавливаем и удаляем все контейнеры:
 
@@ -245,16 +250,18 @@ docker rmi удаляет каждый из них.
 docker system prune -a --volumes
 ```
 
-# Разделение Docker Compose для разработки и продакшена
+## Разделение Docker Compose для разработки и продакшена
 
 ### 1️⃣ Структура проекта
 
+```text
 project/
 ├─ src/
 ├─ Dockerfile
 ├─ docker-compose.dev.yml # содержит build для локальной разработки
 ├─ docker-compose.prod.yml # только image для сервера / продакшена
 ├─ .env
+```
 
 ---
 
@@ -419,12 +426,11 @@ exit
 
 ## Копирование SSH-ключа в буфер обмена
 
-|------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------|
-| **Linux**                    | `cat ~/.ssh/id_rsa.pub \| xclip -sel clip` | Требуется установленный пакет `xclip` (
-`sudo apt install xclip`). Альтернатива: `xsel`. |
-| **macOS**                    | `cat ~/.ssh/id_rsa.pub \| pbcopy`          | Утилита `pbcopy` встроена в macOS. |
-| **Windows (Git Bash / WSL)** | `cat ~/.ssh/id_rsa.pub \| clip`            | Команда `clip` встроена в Windows,
-работает в Git Bash, WSL и PowerShell. |
+| **OS**                   | **Команда**                                | **Примечание**                                                                          |
+|--------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------|
+| Linux                    | `cat ~/.ssh/id_rsa.pub \| xclip -sel clip` | Требуется установленный пакет `xclip` (`sudo apt install xclip`). Альтернатива: `xsel`. |
+| macOS                    | `cat ~/.ssh/id_rsa.pub \| pbcopy`          | Утилита `pbcopy` встроена в macOS.                                                      |
+| Windows (Git Bash / WSL) | `cat ~/.ssh/id_rsa.pub \| clip`            | Команда `clip` встроена в Windows, работает в Git Bash, WSL и PowerShell.               |
 
 ## Команды Linux (для сервера)
 
@@ -510,7 +516,6 @@ exit
 | 10  | `docker --version`                                               | Проверяет, что установлен Docker корректно.                                                        |
 | 11  | `docker info`                                                    | Проверяет, что демон Docker работает и готов к использованию.                                      |
 
-
 ```bash
 docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
@@ -520,11 +525,14 @@ docker volume prune
 ```
 
 ## Certification without a pipeline
+
 ```yml
 EXEC_FOLDER="/path/to/your/project"
 cd $EXEC_FOLDER
 ```
+
 ### Шаг 1: Запуск Nginx с временной HTTP-конфигурацией
+
 ```yml
 echo "Starting Nginx with HTTP config..."
 cp nginx/default_http.conf nginx/default.conf
@@ -532,11 +540,14 @@ docker compose up -d nginx
 ```
 
 ### Шаг 2: Получение сертификата
+
 ```yml
 echo "Running Certbot to get certificate..."
 docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d yourdomain.com --email you@example.com --agree-tos --no-eff-email --non-interactive
 ```
+
 #### Шаг 3: Перезапуск Nginx с HTTPS-конфигурацией
+
 ```yml
 echo "Switching to HTTPS config and restarting Nginx..."
 cp nginx/default_https.conf nginx/default.conf
@@ -544,26 +555,27 @@ docker compose restart nginx
 
 echo "Process completed."
 ```
-### Script bash 
+
+### Script bash
 
 ```yaml
   #!/bin/bash
   # Путь к вашей директории
-EXEC_FOLDER="/path/to/your/project"
-cd $EXEC_FOLDER
+  EXEC_FOLDER="/path/to/your/project"
+  cd $EXEC_FOLDER
   # Шаг 1: Запуск Nginx с временной HTTP-конфигурацией
-echo "Starting Nginx with HTTP config..."
-cp nginx/default_http.conf nginx/default.conf
-docker compose up -d nginx
+  echo "Starting Nginx with HTTP config..."
+  cp nginx/default_http.conf nginx/default.conf
+  docker compose up -d nginx
 
   # Шаг 2: Получение сертификата
-echo "Running Certbot to get certificate..."
-docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d yourdomain.com --email you@example.com --agree-tos --no-eff-email --non-interactive
+  echo "Running Certbot to get certificate..."
+  docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d yourdomain.com --email you@example.com --agree-tos --no-eff-email --non-interactive
 
   # Шаг 3: Перезапуск Nginx с HTTPS-конфигурацией
-echo "Switching to HTTPS config and restarting Nginx..."
-cp nginx/default_https.conf nginx/default.conf
-docker compose restart nginx
+  echo "Switching to HTTPS config and restarting Nginx..."
+  cp nginx/default_https.conf nginx/default.conf
+  docker compose restart nginx
 
-echo "Process completed."
+  echo "Process completed."
 ```
