@@ -19,25 +19,27 @@ app.get('/', async (req, res) => {
         });
 
 		const html = `
-      <!doctype html>
-      <html lang="ru">
-      <head>
-        <meta charset="utf-8" />
-        <meta content="width=device-width,initial-scale=1" name="viewport" />
-        <title>Result Service HTTP</title>
-        <link href="/static/css/style.css" rel="stylesheet" />
-      </head>
-      <body>
-      <main class="page">
-        <div class="container">
-           <p>Current date-time from date-service:</p>
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Result Service SSR HTTP</title>
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<main class="page">
+    <div class="container">
+        <h1>Result Service SSR 🚀 HTTP</h1>
+        <p>Current date-time from date-service:</p>
         <p class="date-output">
              <span class="date-display">${formattedDate}</span>
         </p>
-        </div>
-      </main>
-      </body>
-      </html>
+    </div>
+</main>
+</body>
+</html>
     `;
 		res.send(html);
 	} catch (err) {
