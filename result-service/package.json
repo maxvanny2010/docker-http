@@ -1,0 +1,13 @@
+{
+  "name": "result-service",
+  "version": "1.0.0",
+  "description": "Result service renders HTML with date",
+  "main": "result-service.js",
+  "scripts": {
+    "start": "node result-service.js"
+  },
+  "dependencies": {
+    "express": "5.1.0",
+    "node-fetch": "3.3.2"
+  }
+}
